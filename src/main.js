@@ -32,6 +32,7 @@ var func = function (param,map){
     initPos.lat = position.coords.latitude;
     initPos.lng = position.coords.longitude;
     flightPlanCoordinates.push(initPos);
+    console.log(flightPlanCoordinates);
     var flightPath = new google.maps.Polyline({
       path: flightPlanCoordinates,
       geodesic: true,
