@@ -46,17 +46,21 @@ var func = function (param,map){
 };
 
 function initMap() {
+  var infoWindow = new google.maps.InfoWindow();
   var handleLocationError = function (browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
                           'Error: The Geolocation service failed.' :
                           'Error: Your browser doesn\'t support geolocation.');
+
+    infoWindow.open(map);
   }
 
   // Try HTML5 geolocation.
-  if (navigator.geolocation) {
+  var map = setUpMap({lat: 25.046469, lng: 121.517268});
+  if (!navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      var map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+      map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
       timer = setTimeout(func(1000,map), 1000);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
@@ -137,12 +141,6 @@ function __initMap() {
   map.addListener('click', function(e) {
     placeMarkerAndPanTo(e.latLng, map);
   });
-
-  var infowindow = new google.maps.InfoWindow({
-    content: 'Change the zoom level',
-    position: taiwan
-  });
-  infowindow.open(map);
 
   map.addListener('zoom_changed', function() {
     infowindow.setContent('Zoom: ' + map.getZoom());
