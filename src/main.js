@@ -1,9 +1,27 @@
 var timer = null;
-var temp =  [
-{lat: 37.772, lng: -122.214},
-{lat: 21.291, lng: -157.821},
-{lat: -18.142, lng: 178.431},
-{lat: -27.467, lng: 153.027}
+// var temp =  [
+// {lat: 37.772, lng: -122.214},
+// {lat: 21.291, lng: -157.821},
+// {lat: -18.142, lng: 178.431},
+// {lat: -27.467, lng: 153.027}
+// ];
+var temp = [
+    {
+        "lat": 25.0513265,
+        "lng": 121.533331
+    },
+    {
+        "lat": 25.0513265,
+        "lng": 121.533332
+    },
+    {
+        "lat": 25.0513265,
+        "lng": 121.533333
+    },
+    {
+        "lat": 25.0513265,
+        "lng": 121.533334
+    }
 ];
 var flightPlanCoordinates = [];
 var initPos = {
@@ -14,6 +32,7 @@ var func = function (param,map){
   //Test
   // if(temp.length !== 0){
   //   flightPlanCoordinates.push(temp.shift());
+  //   console.log(flightPlanCoordinates);
   //   var flightPath = new google.maps.Polyline({
   //     path: flightPlanCoordinates,
   //     geodesic: true,
@@ -23,7 +42,7 @@ var func = function (param,map){
   //   });
   //   flightPath.setMap(map);
   // }
-
+  var random  = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
   // Try HTML5 geolocation.
   navigator.geolocation.getCurrentPosition(function(position) {
     if( initPos.lat === position.coords.latitude && initPos.lng === position.coords.longitude){
@@ -31,8 +50,13 @@ var func = function (param,map){
     }
     initPos.lat = position.coords.latitude;
     initPos.lng = position.coords.longitude;
-    flightPlanCoordinates.push(initPos);
-    console.log(flightPlanCoordinates);
+    // flightPlanCoordinates.push(initPos);
+    flightPlanCoordinates.push(
+        {
+          lat:formatFloat(position.coords.latitude,6),
+          lng:formatFloat(position.coords.longitude,6)
+        });
+    console.log(JSON.stringify(flightPlanCoordinates, null, 4));
     var flightPath = new google.maps.Polyline({
       path: flightPlanCoordinates,
       geodesic: true,
@@ -42,9 +66,16 @@ var func = function (param,map){
     });
     flightPath.setMap(map);
   });
+
   clearTimeout(timer);
   timer =setTimeout(func.bind(null,param,map), param);
 };
+
+function formatFloat(num, pos)
+{
+  var size = Math.pow(10, pos);
+  return Math.ceil(num * size) / size;
+}
 
 function initMap() {
   var infoWindow = new google.maps.InfoWindow();
@@ -83,8 +114,8 @@ function placeMarkerAndPanTo(latLng, map) {
 function setUpMap(pos) {
   var map = new google.maps.Map(document.getElementById('map'), {
     // center: {lat: 0, lng: -180},
-    // center: {lat: -34.397, lng: 150.644},
-    center: pos,
+    center: {lat: -34.397, lng: 150.644},
+    // center: pos,
     zoom: 18,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
