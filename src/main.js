@@ -26,7 +26,7 @@ var func = function (param,map){
 
   // Try HTML5 geolocation.
   navigator.geolocation.getCurrentPosition(function(position) {
-    if( initPos.lat === position.coords.latitude || initPos.lng === position.coords.longitude){
+    if( initPos.lat === position.coords.latitude && initPos.lng === position.coords.longitude){
       return;
     }
     initPos.lat = position.coords.latitude;
