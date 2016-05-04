@@ -1,0 +1,149 @@
+var timer = null;
+var temp =  [
+{lat: 37.772, lng: -122.214},
+{lat: 21.291, lng: -157.821},
+{lat: -18.142, lng: 178.431},
+{lat: -27.467, lng: 153.027}
+];
+var flightPlanCoordinates = [];
+var func = function (param,map){
+  var pos = {
+        lat: 1,
+        lng: 1
+      };
+
+  //Test
+  // if(temp.length !== 0){
+  //   flightPlanCoordinates.push(temp.shift());
+  //   var flightPath = new google.maps.Polyline({
+  //     path: flightPlanCoordinates,
+  //     geodesic: true,
+  //     strokeColor: '‪#‎FF0000‬',
+  //     strokeOpacity: 1.0,
+  //     strokeWeight: 2
+  //   });
+  //   flightPath.setMap(map);
+  // }
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      if( pos.lat === position.coords.latitude || pos.lng === position.coords.longitude){
+        return;
+      }
+      pos.lat = position.coords.latitude;
+      pos.lng = position.coords.longitude;
+      flightPlanCoordinates.push(pos);
+      var flightPath = new google.maps.Polyline({
+        path: flightPlanCoordinates,
+        geodesic: true,
+        strokeColor: '‪#‎FF0000‬',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      });
+      flightPath.setMap(map);
+      // placeMarkerAndPanTo(pos,map);
+      // map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+  clearTimeout(timer);
+  timer =setTimeout(func.bind(null,param,map), param);
+};
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    // center: {lat: 0, lng: -180},
+    // center: {lat: -34.397, lng: 150.644},
+    center: new google.maps.LatLng(25.046469, 121.517268),
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  });
+  timer = setTimeout(func(1000,map), 1000);
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+
+function __initMap() {
+  //Set Center
+  var taiwan = new google.maps.LatLng(25.046469, 121.517268);
+
+  //MapInit
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: taiwan,
+    zoom: 12,
+    scaleControl: true,
+    zoomControl: false,
+    disableDoubleClickZoom: true,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      mapTypeIds: [
+        google.maps.MapTypeId.ROADMAP,
+        google.maps.MapTypeId.TERRAIN
+      ]
+    },
+    disableDefaultUI: true
+  });
+
+  //Marker
+  var marker = new google.maps.Marker({
+    position: taiwan,
+    map: map,
+    title: 'Click to zoom'
+  });
+  //Marker Event
+  marker.addListener('click', function(e) {
+    map.setZoom(8);
+    console.log(marker)
+    console.log(e)
+    map.setCenter(marker.getPosition());
+  });
+
+  //Set Map Event change to Sub Center
+  var myLatlng = {lat: -25.363, lng: 131.044};
+  //  map.addListener('center_changed', function() {
+  //   // 3 seconds after the center of the map has changed, pan back to the
+  //   // marker.
+  //   window.setTimeout(function() {
+  //     console.log(map);
+  //     map.panTo(marker.getPosition());
+  //   }, 3000);
+  // });
+
+  map.addListener('click', function(e) {
+    placeMarkerAndPanTo(e.latLng, map);
+  });
+
+  var infowindow = new google.maps.InfoWindow({
+    content: 'Change the zoom level',
+    position: taiwan
+  });
+  infowindow.open(map);
+
+  map.addListener('zoom_changed', function() {
+    infowindow.setContent('Zoom: ' + map.getZoom());
+  });
+
+  var mapDiv = document.getElementById('map');
+  google.maps.event.addDomListener(mapDiv, 'click', function() {
+    window.alert('Map was clicked!');
+  });
+}
+
+function placeMarkerAndPanTo(latLng, map) {
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map
+  });
+  map.panTo(latLng);
+}
