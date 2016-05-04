@@ -6,12 +6,11 @@ var temp =  [
 {lat: -27.467, lng: 153.027}
 ];
 var flightPlanCoordinates = [];
+var initPos = {
+      lat: 1,
+      lng: 1
+    };
 var func = function (param,map){
-  var pos = {
-        lat: 1,
-        lng: 1
-      };
-
   //Test
   // if(temp.length !== 0){
   //   flightPlanCoordinates.push(temp.shift());
@@ -26,24 +25,39 @@ var func = function (param,map){
   // }
 
   // Try HTML5 geolocation.
+  navigator.geolocation.getCurrentPosition(function(position) {
+    if( initPos.lat === position.coords.latitude || initPos.lng === position.coords.longitude){
+      return;
+    }
+    initPos.lat = position.coords.latitude;
+    initPos.lng = position.coords.longitude;
+    flightPlanCoordinates.push(initPos);
+    var flightPath = new google.maps.Polyline({
+      path: flightPlanCoordinates,
+      geodesic: true,
+      strokeColor: '‪#‎FF0000‬',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    flightPath.setMap(map);
+  });
+  clearTimeout(timer);
+  timer =setTimeout(func.bind(null,param,map), param);
+};
+
+function initMap() {
+  var handleLocationError = function (browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+  }
+
+  // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      if( pos.lat === position.coords.latitude || pos.lng === position.coords.longitude){
-        return;
-      }
-      pos.lat = position.coords.latitude;
-      pos.lng = position.coords.longitude;
-      flightPlanCoordinates.push(pos);
-      var flightPath = new google.maps.Polyline({
-        path: flightPlanCoordinates,
-        geodesic: true,
-        strokeColor: '‪#‎FF0000‬',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-      });
-      flightPath.setMap(map);
-      // placeMarkerAndPanTo(pos,map);
-      // map.setCenter(pos);
+      var map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+      timer = setTimeout(func(1000,map), 1000);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
@@ -51,26 +65,26 @@ var func = function (param,map){
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
-  clearTimeout(timer);
-  timer =setTimeout(func.bind(null,param,map), param);
-};
+}
 
-function initMap() {
+function placeMarkerAndPanTo(latLng, map) {
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map
+  });
+  map.panTo(latLng);
+}
+
+function setUpMap(pos) {
   var map = new google.maps.Map(document.getElementById('map'), {
     // center: {lat: 0, lng: -180},
     // center: {lat: -34.397, lng: 150.644},
-    center: new google.maps.LatLng(25.046469, 121.517268),
+    center: pos,
     zoom: 18,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
-  timer = setTimeout(func(1000,map), 1000);
-}
-
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
+  placeMarkerAndPanTo(pos,map);
+  return map;
 }
 
 function __initMap() {
@@ -138,12 +152,4 @@ function __initMap() {
   google.maps.event.addDomListener(mapDiv, 'click', function() {
     window.alert('Map was clicked!');
   });
-}
-
-function placeMarkerAndPanTo(latLng, map) {
-  var marker = new google.maps.Marker({
-    position: latLng,
-    map: map
-  });
-  map.panTo(latLng);
 }
