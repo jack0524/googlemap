@@ -50,7 +50,6 @@ var func = function (param,map){
     }
     initPos.lat = position.coords.latitude;
     initPos.lng = position.coords.longitude;
-    // flightPlanCoordinates.push(initPos);
     flightPlanCoordinates.push(
         {
           lat:formatFloat(position.coords.latitude,6),
@@ -90,13 +89,28 @@ function initMap() {
 
   // Try HTML5 geolocation.
   var map = setUpMap({lat: 25.046469, lng: 121.517268});
-  if (navigator.geolocation) {
+  if (navigator && navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
       timer = setTimeout(func(1000,map), 1000);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
-    });
+    },{
+         timeout: 0,
+         enableHighAccuracy: true,
+         maximumAge: Infinity
+     });
+
+    navigator.geolocation.watchPosition(function(position) {
+      map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+      timer = setTimeout(func(1000,map), 1000);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    },{
+         timeout: 0,
+         enableHighAccuracy: true,
+         maximumAge: Infinity
+     });
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
