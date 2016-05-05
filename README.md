@@ -8,6 +8,7 @@ MDN：https://developer.mozilla.org/zh-TW/docs/Using_geolocation
 ####API
 + getCurrentPosition() - 方法来获得用户的位置。
 	+ 回傳物件
+	
 	> + coords.latitude - 緯度
 
 	> + coords.longitude - 經度
