@@ -90,16 +90,47 @@ function initMap() {
   // Try HTML5 geolocation.
   var map = setUpMap({lat: 25.046469, lng: 121.517268});
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
-      timer = setTimeout(func(1000,map), 1000);
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    },{
-         timeout: 0,
-         enableHighAccuracy: true,
-         maximumAge: Infinity
-     });
+    //One time snapshot
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+            // timer = setTimeout(func(1000,map), 1000);
+        },
+         // Optional settings below
+         handleLocationError.bind(null,true, infoWindow, map.getCenter())
+    );
+     
+    //Tracking users position
+    watchId = navigator.geolocation.watchPosition(
+        function(position) {
+          flightPlanCoordinates.push(
+              {
+                lat:formatFloat(position.coords.latitude,6),
+                lng:formatFloat(position.coords.longitude,6)
+              });
+          console.log(JSON.stringify(flightPlanCoordinates, null, 4));
+          var flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: '‪#‎FF0000‬',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+          flightPath.setMap(map);
+        },
+         // Optional settings below
+         handleLocationError.bind(null,true, infoWindow, map.getCenter())
+    );
+    // navigator.geolocation.getCurrentPosition(function(position) {
+    //   map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+    //   timer = setTimeout(func(1000,map), 1000);
+    // }, function() {
+    //   handleLocationError(true, infoWindow, map.getCenter());
+    // },{
+    //      timeout: 0,
+    //      enableHighAccuracy: true,
+    //      maximumAge: Infinity
+    //  });
 
     // navigator.geolocation.watchPosition(function(position) {
 
