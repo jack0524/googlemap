@@ -21,11 +21,11 @@ https://robertnyman.com/2010/03/15/geolocation-in-web-browsers-to-find-location-
 	
 	> + coords.altitudeAccuracy - 海拔的精度
 	
-	> + coords.heading	方向，从正北開始以度計
+	> + coords.heading	方向，從正北開始以度計
 	
 	> + coords.speed	速度，以米/每秒計
 	
-	> + timestamp	响应的日期/时间
+	> + timestamp	日期/時間
 	
 
 + watchPosition(position) - 持續返回使用者位置。
