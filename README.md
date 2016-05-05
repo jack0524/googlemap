@@ -6,7 +6,7 @@ MDN：https://developer.mozilla.org/zh-TW/docs/Using_geolocation
 中文W3c：http://www.w3school.com.cn/html5/html_5_geolocation.asp
 
 ####API
-+ getCurrentPosition() - 方法来获得用户的位置。
++ getCurrentPosition(position) - 方法来获得用户的位置。
 	+ 回傳物件
 	
 	> + coords.latitude - 緯度
@@ -26,7 +26,7 @@ MDN：https://developer.mozilla.org/zh-TW/docs/Using_geolocation
 	> + timestamp	响应的日期/时间
 	
 
-+ watchPosition() - 持續返回使用者位置。
++ watchPosition(position) - 持續返回使用者位置。
 + clearWatch() - 停止watchPosition()。
 
 支援程度：
