@@ -79,7 +79,7 @@ function setUpMap(pos) {
     // center: {lat: 0, lng: -180},
     center: {lat: -34.397, lng: 150.644},
     // center: pos,
-    zoom: 18,
+    zoom: 20,
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
   placeMarkerAndPanTo(pos,map);
