@@ -101,19 +101,19 @@ function initMap() {
          maximumAge: Infinity
      });
 
-  //   navigator.geolocation.watchPosition(function(position) {
+    // navigator.geolocation.watchPosition(function(position) {
       
-  //   }, function() {
-  //     handleLocationError(true, infoWindow, map.getCenter());
-  //   },{
-  //        timeout: 0,
-  //        enableHighAccuracy: true,
-  //        maximumAge: Infinity
-  //    });
-  // } else {
-  //   // Browser doesn't support Geolocation
-  //   handleLocationError(false, infoWindow, map.getCenter());
-  // }
+    // }, function() {
+    //   handleLocationError(true, infoWindow, map.getCenter());
+    // },{
+    //      timeout: 0,
+    //      enableHighAccuracy: true,
+    //      maximumAge: Infinity
+    //  });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 }
 
 function placeMarkerAndPanTo(latLng, map) {
