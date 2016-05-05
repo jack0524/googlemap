@@ -89,7 +89,7 @@ function initMap() {
 
   // Try HTML5 geolocation.
   var map = setUpMap({lat: 25.046469, lng: 121.517268});
-  if (navigator && navigator.geolocation) {
+  if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
       timer = setTimeout(func(1000,map), 1000);
@@ -102,7 +102,7 @@ function initMap() {
      });
 
     // navigator.geolocation.watchPosition(function(position) {
-      
+
     // }, function() {
     //   handleLocationError(true, infoWindow, map.getCenter());
     // },{
