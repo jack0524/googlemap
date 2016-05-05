@@ -9,13 +9,21 @@ MDN：https://developer.mozilla.org/zh-TW/docs/Using_geolocation
 + getCurrentPosition() - 方法来获得用户的位置。
 	+ 回傳物件
 	> + coords.latitude - 緯度
+
 	> + coords.longitude - 經度
+	
 	> + coords.accuracy - 位置精度
+	
 	> + coords.altitude - 海拔
+	
 	> + coords.altitudeAccuracy - 海拔的精度
-	> + coords.heading	方向，从正北开始以度计
-	> + coords.speed	速度，以米/每秒计
+	
+	> + coords.heading	方向，从正北開始以度計
+	
+	> + coords.speed	速度，以米/每秒計
+	
 	> + timestamp	响应的日期/时间
+	
 
 + watchPosition() - 持續返回使用者位置。
 + clearWatch() - 停止watchPosition()。
