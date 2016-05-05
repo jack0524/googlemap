@@ -5,6 +5,8 @@ MDN：https://developer.mozilla.org/zh-TW/docs/Using_geolocation
 
 中文W3c：http://www.w3school.com.cn/html5/html_5_geolocation.asp
 
+https://robertnyman.com/2010/03/15/geolocation-in-web-browsers-to-find-location-google-maps-examples/
+
 ####API
 + getCurrentPosition(position) - 方法来获得用户的位置。
 	+ 回傳物件
