@@ -1,10 +1,4 @@
 var timer = null;
-// var temp =  [
-// {lat: 37.772, lng: -122.214},
-// {lat: 21.291, lng: -157.821},
-// {lat: -18.142, lng: 178.431},
-// {lat: -27.467, lng: 153.027}
-// ];
 var temp = [
     {
         "lat": 25.0513265,
@@ -29,7 +23,7 @@ var initPos = {
       lng: 1
     };
 var func = function (param,map){
-  //Test
+  //Draw Test Path
   // if(temp.length !== 0){
   //   flightPlanCoordinates.push(temp.shift());
   //   console.log(flightPlanCoordinates);
@@ -42,8 +36,8 @@ var func = function (param,map){
   //   });
   //   flightPath.setMap(map);
   // }
-  var random  = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
-  // Try HTML5 geolocation.
+
+  // Try HTML5 geolocation - getCurrentPosition
   navigator.geolocation.getCurrentPosition(function(position) {
     if( initPos.lat === position.coords.latitude && initPos.lng === position.coords.longitude){
       return;
@@ -66,86 +60,11 @@ var func = function (param,map){
     flightPath.setMap(map);
   });
 
+
+  //SetInterval
   clearTimeout(timer);
   timer =setTimeout(func.bind(null,param,map), param);
 };
-
-function formatFloat(num, pos)
-{
-  var size = Math.pow(10, pos);
-  return Math.ceil(num * size) / size;
-}
-
-function initMap() {
-  var infoWindow = new google.maps.InfoWindow();
-  var handleLocationError = function (browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
-                          'Error: The Geolocation service failed.' :
-                          'Error: Your browser doesn\'t support geolocation.');
-
-    infoWindow.open(map);
-  }
-
-  // Try HTML5 geolocation.
-  var map = setUpMap({lat: 25.046469, lng: 121.517268});
-  if (navigator.geolocation) {
-    //One time snapshot
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
-            // timer = setTimeout(func(1000,map), 1000);
-        },
-         // Optional settings below
-         handleLocationError.bind(null,true, infoWindow, map.getCenter())
-    );
-     
-    //Tracking users position
-    watchId = navigator.geolocation.watchPosition(
-        function(position) {
-          flightPlanCoordinates.push(
-              {
-                lat:formatFloat(position.coords.latitude,6),
-                lng:formatFloat(position.coords.longitude,6)
-              });
-          console.log(JSON.stringify(flightPlanCoordinates, null, 4));
-          var flightPath = new google.maps.Polyline({
-            path: flightPlanCoordinates,
-            geodesic: true,
-            strokeColor: '‪#‎FF0000‬',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-          flightPath.setMap(map);
-        },
-         // Optional settings below
-         handleLocationError.bind(null,true, infoWindow, map.getCenter())
-    );
-    // navigator.geolocation.getCurrentPosition(function(position) {
-    //   map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
-    //   timer = setTimeout(func(1000,map), 1000);
-    // }, function() {
-    //   handleLocationError(true, infoWindow, map.getCenter());
-    // },{
-    //      timeout: 0,
-    //      enableHighAccuracy: true,
-    //      maximumAge: Infinity
-    //  });
-
-    // navigator.geolocation.watchPosition(function(position) {
-
-    // }, function() {
-    //   handleLocationError(true, infoWindow, map.getCenter());
-    // },{
-    //      timeout: 0,
-    //      enableHighAccuracy: true,
-    //      maximumAge: Infinity
-    //  });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
 
 function placeMarkerAndPanTo(latLng, map) {
   var marker = new google.maps.Marker({
@@ -167,6 +86,74 @@ function setUpMap(pos) {
   return map;
 }
 
+function formatFloat(num, pos)
+{
+  var size = Math.pow(10, pos);
+  return Math.ceil(num * size) / size;
+}
+
+function initMap() {
+  var infoWindow = new google.maps.InfoWindow();
+  var handleLocationError = function (browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+
+    infoWindow.open(map);
+  }
+
+  // Try HTML5 geolocation.
+  var map = setUpMap({lat: 25.046469, lng: 121.517268});
+  if (navigator.geolocation) {
+
+    // //One time snapshot
+    // navigator.geolocation.getCurrentPosition(
+    //     function(position) {
+    //         map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+    //     },
+    //      handleLocationError.bind(null,true, infoWindow, map.getCenter())
+    // );
+     
+    // //Tracking users position
+    // watchId = navigator.geolocation.watchPosition(
+    //     function(position) {
+    //       flightPlanCoordinates.push(
+    //           {
+    //             lat:formatFloat(position.coords.latitude,6),
+    //             lng:formatFloat(position.coords.longitude,6)
+    //           });
+    //       console.log(JSON.stringify(flightPlanCoordinates, null, 4));
+    //       var flightPath = new google.maps.Polyline({
+    //         path: flightPlanCoordinates,
+    //         geodesic: true,
+    //         strokeColor: '‪#‎FF0000‬',
+    //         strokeOpacity: 1.0,
+    //         strokeWeight: 2
+    //       });
+    //       flightPath.setMap(map);
+    //     },
+    //      // Optional settings below
+    //      handleLocationError.bind(null,true, infoWindow, map.getCenter())
+    // );
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+      map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
+      timer = setTimeout(func(1000,map), 1000);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    },{
+         timeout: 0,
+         enableHighAccuracy: true,
+         maximumAge: Infinity
+     });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+//Other API
 function __initMap() {
   //Set Center
   var taiwan = new google.maps.LatLng(25.046469, 121.517268);
