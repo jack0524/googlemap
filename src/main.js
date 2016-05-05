@@ -101,20 +101,19 @@ function initMap() {
          maximumAge: Infinity
      });
 
-    navigator.geolocation.watchPosition(function(position) {
-      map = setUpMap({lat:position.coords.latitude,lng:position.coords.longitude});
-      timer = setTimeout(func(1000,map), 1000);
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    },{
-         timeout: 0,
-         enableHighAccuracy: true,
-         maximumAge: Infinity
-     });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
+  //   navigator.geolocation.watchPosition(function(position) {
+      
+  //   }, function() {
+  //     handleLocationError(true, infoWindow, map.getCenter());
+  //   },{
+  //        timeout: 0,
+  //        enableHighAccuracy: true,
+  //        maximumAge: Infinity
+  //    });
+  // } else {
+  //   // Browser doesn't support Geolocation
+  //   handleLocationError(false, infoWindow, map.getCenter());
+  // }
 }
 
 function placeMarkerAndPanTo(latLng, map) {
